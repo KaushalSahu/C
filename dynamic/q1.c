@@ -29,7 +29,8 @@ int* push_back(int a[],int n )
 			{
 				capacity=capacity*2;
 				temp2=(int*)malloc(sizeof(int)*capacity);
-				for(int j=0;j<=i;j++) temp2[j]=a[j];
+				for(int j=0;j<=i;j++) 
+					temp2[j]=a[j];
 				free(temp);
 				temp=temp2;
 
