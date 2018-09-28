@@ -1,4 +1,4 @@
-This folder contains all my C assignments problems on different topics.
+Programming Practices
 
 [2D Arrays](https://github.com/kaushalsahu/C/tree/master/2DArrays)
 
