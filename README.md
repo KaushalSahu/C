@@ -1,4 +1,8 @@
 Programming Practices
+=====================
+
+Assignments
+-----------
 
 [2D Arrays](https://github.com/kaushalsahu/C/tree/master/2DArrays)
 
