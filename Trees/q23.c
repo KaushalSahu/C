@@ -7,7 +7,7 @@ struct node
 };
 struct node *newNode(int item)
 {
-	struct node *temp =  (struct node *)malloc(sizeof(struct node));
+	struct node *temp =(struct node *)malloc(sizeof(struct node));
 	temp->key = item;
 	temp->left = temp->right = NULL;
 	return temp;
@@ -26,54 +26,58 @@ struct node* insert(struct node* node, int key)
 }
 void inOrder(struct node *root)
 {
-	if(root != NULL)
+	if(root!=NULL)
 	{
+		struct node *temp;
+		if(root->left!=NULL)
+		{
+			if(root->key == root->left->key)
+			{
+				if(root->left->left!=NULL)
+				{
+					temp = root->left;
+					root->left=root->left->left;
+					free(temp);
+					temp = NULL;
+				}
+				else if(root->left->right!=NULL)
+				{
+					temp = root->left;
+					root->left=root->left->right;
+					free(temp);
+					temp = NULL;
+				}
+				else
+					root->left = NULL;
+			}
+		}
 		inOrder(root->left);
-		printf("%d ",root->key);
 		inOrder(root->right);
 	}
 }
-
-struct node * minValue(struct node* node) 
+void print(struct node *root)
 {
-	struct node* current = node;
-
-	while (current->left != NULL) 
+	if(root!=NULL)
 	{
-		current = current->left;
-	}
-	return current;
-}
-
-void deletebinaryTree(struct node *root)
-{
-	struct node *temp;
-	while(root != NULL)
-	{
-		inOrder(root);
-		temp = inOrderSuccessor(root,root);
-		if(root->left !=NULL)
-			temp->left = root->left;
-		if(root->right!=NULL)
-			temp->right = root->right;
-
-		root = temp;
+		print(root->left);
+		printf("%d ",root->key);
+		print(root->right);
 	}
 }
-
-
 int main()
 {
 	int n;
 	int i;
 	int a;
-	struct node *root = NULL;
+	int k;
 	scanf("%d",&n);
+	struct node *root = NULL;
 	for(i=0;i<n;i++)
 	{
 		scanf("%d",&a);
 		root = insert(root,a);
 	}
-	deletebinaryTree(root);
+	inOrder(root);
+	print(root);
 	return 0;
 }
