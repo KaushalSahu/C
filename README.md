@@ -4,7 +4,7 @@ Programming Practices
 Assignments
 -----------
 
-[2D Arrays](https://github.com/kaushalsahu/C/tree/master/2DArrays)
+[2D Arrays](https://github.com/kaushalsahu/C/tree/master/2D%20Arrays)
 
 [Dennis Ritchie](https://github.com/kaushalsahu/C/tree/master/DennisRitchie)
 
