@@ -24,45 +24,56 @@ struct node* insert(struct node* node, int key)
 
 	return node;
 }
-void mirror(struct node* node)
+void inOrder(struct node *root)
 {
-	if (node==NULL)
-		return;
-	else
+	if(root != NULL)
 	{
-		struct node* temp;
-
-		mirror(node->left);
-		mirror(node->right);
-
-		temp        = node->left;
-		node->left  = node->right;
-		node->right = temp;
+		inOrder(root->left);
+		printf("%d ",root->key);
+		inOrder(root->right);
 	}
 }
-void inorder(struct node* node)
-{
-	if (node == NULL)
-		return;
 
-	inorder(node->left);
-	printf("%d ", node->key);
-	inorder(node->right);
+struct node * minValue(struct node* node) 
+{
+	struct node* current = node;
+
+	while (current->left != NULL) 
+	{
+		current = current->left;
+	}
+	return current;
 }
+
+void deletebinaryTree(struct node *root)
+{
+	struct node *temp;
+	while(root != NULL)
+	{
+		inOrder(root);
+		temp = inOrderSuccessor(root,root);
+		if(root->left !=NULL)
+			temp->left = root->left;
+		if(root->right!=NULL)
+			temp->right = root->right;
+
+		root = temp;
+	}
+}
+
+
 int main()
 {
 	int n;
 	int i;
 	int a;
-	int k;
-	scanf("%d",&n);
 	struct node *root = NULL;
+	scanf("%d",&n);
 	for(i=0;i<n;i++)
 	{
 		scanf("%d",&a);
 		root = insert(root,a);
 	}
-	mirror(root);
-	inorder(root);
+	deletebinaryTree(root);
 	return 0;
 }

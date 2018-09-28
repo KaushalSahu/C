@@ -24,30 +24,20 @@ struct node* insert(struct node* node, int key)
 
 	return node;
 }
-void mirror(struct node* node)
+void printkdistant(struct node *root , int k)
 {
-	if (node==NULL)
+	if(root == NULL)
 		return;
+	if( k == 0 )
+	{
+		printf( "%d ", root->key );
+		return ;
+	}
 	else
 	{
-		struct node* temp;
-
-		mirror(node->left);
-		mirror(node->right);
-
-		temp        = node->left;
-		node->left  = node->right;
-		node->right = temp;
+		printkdistant( root->left, k-1 ) ;
+		printkdistant( root->right, k-1 ) ;
 	}
-}
-void inorder(struct node* node)
-{
-	if (node == NULL)
-		return;
-
-	inorder(node->left);
-	printf("%d ", node->key);
-	inorder(node->right);
 }
 int main()
 {
@@ -62,7 +52,7 @@ int main()
 		scanf("%d",&a);
 		root = insert(root,a);
 	}
-	mirror(root);
-	inorder(root);
+	scanf("%d",&k);
+	printkdistant(root, k);
 	return 0;
 }

@@ -26,7 +26,8 @@ struct node* insert(struct node* node, int key)
 }
 void deleteTree(struct node* node)
 {
-	if (node == NULL) return;
+	if (node == NULL) 
+		return;
 
 	deleteTree(node->left);
 	deleteTree(node->right);

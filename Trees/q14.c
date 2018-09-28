@@ -24,37 +24,35 @@ struct node* insert(struct node* node, int key)
 
 	return node;
 }
-void mirror(struct node* node)
+struct node* leafDelete(struct node *root)
 {
-	if (node==NULL)
-		return;
-	else
+	if(root == NULL)
+		return NULL;
+	if (root->left == NULL && root->right == NULL) 
 	{
-		struct node* temp;
-
-		mirror(node->left);
-		mirror(node->right);
-
-		temp        = node->left;
-		node->left  = node->right;
-		node->right = temp;
+		free(root);
+		return NULL;
 	}
-}
-void inorder(struct node* node)
-{
-	if (node == NULL)
-		return;
 
-	inorder(node->left);
-	printf("%d ", node->key);
-	inorder(node->right);
+	root->left = leafDelete(root->left);
+	root->right = leafDelete(root->right);
+
+	return root;
+}
+void inorder(struct node* root)
+{
+	if (root != NULL) 
+	{
+		inorder(root->left);
+		printf("%d ",root->key);
+		inorder(root->right);
+	}
 }
 int main()
 {
 	int n;
 	int i;
 	int a;
-	int k;
 	scanf("%d",&n);
 	struct node *root = NULL;
 	for(i=0;i<n;i++)
@@ -62,7 +60,7 @@ int main()
 		scanf("%d",&a);
 		root = insert(root,a);
 	}
-	mirror(root);
+	leafDelete(root);
 	inorder(root);
 	return 0;
 }
