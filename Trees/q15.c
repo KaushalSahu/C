@@ -26,12 +26,12 @@ struct node* insert(struct node* node, int key)
 }
 struct node * minValueNode(struct node* node)
 {
-    struct node* current = node;
+	struct node* current = node;
 
-    while (current->left != NULL)
-        current = current->left;
+	while (current->left != NULL)
+		current = current->left;
 
-    return current;
+	return current;
 }
 struct node* deleteNode(struct node* root, int key)
 {
@@ -66,15 +66,14 @@ struct node* deleteNode(struct node* root, int key)
 	}
 	return root;
 }
-
 void inorder(struct node *root)
 {
-    if (root != NULL)
-    {
-        inorder(root->left);
-        printf("%d ", root->key);
-        inorder(root->right);
-    }
+	if (root != NULL)
+	{
+		inorder(root->left);
+		printf("%d ", root->key);
+		inorder(root->right);
+	}
 }
 int main()
 {

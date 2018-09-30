@@ -50,7 +50,6 @@ struct node *prune(struct node *root, int sum)
 			return NULL; 
 		} 
 	} 
-
 	return root; 
 } 
 int main() 
