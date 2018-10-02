@@ -40,7 +40,6 @@ int main()
 	int n;
 	int i;
 	int a;
-	int k;
 	int t;
 	scanf("%d",&t);
 	scanf("%d",&n);
