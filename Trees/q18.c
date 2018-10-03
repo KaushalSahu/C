@@ -26,10 +26,8 @@ struct node* insertLevelOrder(int arr[], struct node* root,int i, int n)
 	} 
 	return root; 
 } 
-
 struct node* LCA(struct node * root, int n1,int n2) 
 { 
-    // Your code here 
     if (root == NULL) 
        return root; 
     if (root->data == n1 || root->data == n2) 
@@ -45,9 +43,6 @@ struct node* LCA(struct node * root, int n1,int n2)
   
     return LCA(root->right, n1, n2); 
 } 
-  
-// Returns level of data k if it is present in 
-// tree, otherwise returns -1 
 int findLevel(struct node *root, int k, int level) 
 { 
     if(root == NULL) return -1; 
@@ -58,10 +53,8 @@ int findLevel(struct node *root, int k, int level)
        return findLevel(root->right, k, level+1); 
     return left; 
 } 
-  
 int findDistance(struct node* root, int a, int b) 
 { 
-    // Your code here 
     struct node* lca = LCA(root, a , b); 
   
     int d1 = findLevel(lca, a, 0); 

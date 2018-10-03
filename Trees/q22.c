@@ -37,7 +37,8 @@ void inorder(struct node *root)
 }
 struct node *prune(struct node *root, int sum) 
 { 
-	if (root == NULL) return NULL; 
+	if (root == NULL) 
+		return NULL; 
 
 	root->left = prune(root->left, sum - root->data); 
 	root->right = prune(root->right, sum - root->data); 
