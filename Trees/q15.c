@@ -35,7 +35,8 @@ struct node * minValueNode(struct node* node)
 }
 struct node* deleteNode(struct node* root, int key)
 {
-	if (root == NULL) return root;
+	if (root == NULL) 
+		return root;
 
 	if (key < root->key)
 		root->left = deleteNode(root->left, key);

@@ -1,6 +1,5 @@
 #include<stdio.h>
 #include<stdlib.h>
-
 struct node
 {
 	int key;
@@ -55,9 +54,8 @@ int main()
 	struct node *root = NULL;
 	for(i=0;i<n;i++)
 	{
-		scanf("%d",&a);
-		arr[i]=a;
-		root = insert(root,a);
+		scanf("%d",&arr[i]);
+		root = insert(root,arr[i]);
 	}
 	rootleaf(root,0,arr);
 }

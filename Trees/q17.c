@@ -29,9 +29,9 @@ struct node* insertLevelOrder(int arr[], struct node* root,int i, int n)
 
 int sum(struct node *root)
 {
-   if(root == NULL)
-     return 0;
-   return sum(root->left) + root->data + sum(root->right);
+	if(root == NULL)
+		return 0;
+	return sum(root->left) + root->data + sum(root->right);
 }
 
 int isSumTree(struct node* node) 
@@ -62,4 +62,4 @@ int main()
 		printf("1");
 	else
 		printf("0");
-	}
+}
