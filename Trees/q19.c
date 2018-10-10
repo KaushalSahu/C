@@ -37,7 +37,6 @@ int main()
 	int n;
 	int i;
 	int a;
-	int k;
 	scanf("%d",&n);
 	struct node *root = NULL;
 	for(i=0;i<n;i++)

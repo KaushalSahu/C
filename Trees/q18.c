@@ -45,12 +45,16 @@ struct node* LCA(struct node * root, int n1,int n2)
 } 
 int findLevel(struct node *root, int k, int level) 
 { 
-    if(root == NULL) return -1; 
-    if(root->data == k) return level; 
+    if(root == NULL) 
+	    return -1; 
+    if(root->data == k) 
+	    return level; 
   
     int left = findLevel(root->left, k, level+1); 
+
     if (left == -1) 
        return findLevel(root->right, k, level+1); 
+
     return left; 
 } 
 int findDistance(struct node* root, int a, int b) 
