@@ -6,6 +6,8 @@ Assignments
 
 [2D Arrays](https://github.com/kaushalsahu/C/tree/master/2D%20Arrays)
 
+[Self Balancing BST](https://github.com/kaushalsahu/C/tree/master/BBST)
+
 [Dennis Ritchie](https://github.com/kaushalsahu/C/tree/master/Dennis%20Ritchie)
 
 [Dynamic Tables](https://github.com/kaushalsahu/C/tree/master/dynamic)
