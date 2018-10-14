@@ -25,8 +25,7 @@ int max(int a, int b)
 
 struct Node* newNode(int key) 
 { 
-	struct Node* node = (struct Node*) 
-		malloc(sizeof(struct Node)); 
+	struct Node* node = (struct Node*)malloc(sizeof(struct Node)); 
 	node->key   = key; 
 	node->left   = NULL; 
 	node->right  = NULL; 
@@ -159,8 +158,7 @@ struct Node* deleteNode(struct Node* root, int key)
 	if (root == NULL) 
 		return root; 
 
-	root->height = 1 + max(height(root->left), 
-			height(root->right)); 
+	root->height = 1 + max(height(root->left),height(root->right)); 
 
 	int balance = getBalance(root); 
 
