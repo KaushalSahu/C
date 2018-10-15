@@ -74,14 +74,14 @@ struct Node* insert(struct Node* node, int key)
 		return(newNode(key)); 
 
 	if (key < node->key) 
-		node->left  = insert(node->left, key); 
+		node->left  = insert(node->left, key);
+
 	else if (key > node->key) 
 		node->right = insert(node->right, key); 
 	else 		
 		return node; 
 
-	node->height = 1 + max(height(node->left), 
-			height(node->right)); 
+	node->height = 1 + max(height(node->left),height(node->right)); 
 
 	int balance = getBalance(node); 
 
@@ -133,8 +133,7 @@ struct Node* deleteNode(struct Node* root, int key)
 	{ 
 		if( (root->left == NULL) || (root->right == NULL) ) 
 		{ 
-			struct Node *temp = root->left ? root->left : 
-				root->right; 
+			struct Node *temp = root->left ? root->left : root->right; 
 
 			if (temp == NULL) 
 			{ 
@@ -166,14 +165,14 @@ struct Node* deleteNode(struct Node* root, int key)
 	if (balance > 1 && getBalance(root->left) >= 0) 
 		return rightRotate(root); 
 
+	if (balance < -1 && getBalance(root->right) <= 0) 
+		return leftRotate(root); 
+
 	if (balance > 1 && getBalance(root->left) < 0) 
 	{ 
 		root->left =  leftRotate(root->left); 
 		return rightRotate(root); 
 	} 
-
-	if (balance < -1 && getBalance(root->right) <= 0) 
-		return leftRotate(root); 
 
 	if (balance < -1 && getBalance(root->right) > 0) 
 	{ 

@@ -19,6 +19,7 @@ struct node* insertBST(struct node* node, int key)
 
 	if (key < node->key) 
 		node->left  = insertBST(node->left, key); 
+
 	else if (key > node->key) 
 		node->right = insertBST(node->right, key);    
 
@@ -45,7 +46,8 @@ struct node *splay(struct node *root, int key)
 
 	if (root->key > key) 
 	{ 
-		if (root->left == NULL) return root; 
+		if (root->left == NULL) 
+			return root; 
 
 		if (root->left->key > key) 
 		{ 
@@ -66,7 +68,8 @@ struct node *splay(struct node *root, int key)
 	else 	
 	{ 
 
-		if (root->right == NULL) return root; 
+		if (root->right == NULL) 
+			return root; 
 
 		if (root->right->key > key) 
 		{ 
@@ -85,11 +88,13 @@ struct node *splay(struct node *root, int key)
 }  
 struct node *insert(struct node *root, int k) 
 { 
-	if (root == NULL) return newNode(k); 
+	if (root == NULL) 
+		return newNode(k); 
 
 	root = splay(root, k); 
 
-	if (root->key == k) return root; 
+	if (root->key == k) 
+		return root; 
 
 	struct node *newnode  = newNode(k); 
 
