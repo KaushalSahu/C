@@ -54,7 +54,6 @@ struct node *splay(struct node *root, int key)
 
 			root = rightRotate(root); 
 		} 
-
 		else if (root->left->key < key) 
 		{ 
 			root->left->right = splay(root->left->right, key); 
@@ -62,12 +61,10 @@ struct node *splay(struct node *root, int key)
 			if (root->left->right != NULL) 
 				root->left = leftRotate(root->left); 
 		} 
-
 		return (root->left == NULL)? root: rightRotate(root); 
 	} 
 	else 	
 	{ 
-
 		if (root->right == NULL) 
 			return root; 
 
@@ -83,7 +80,6 @@ struct node *splay(struct node *root, int key)
 			root->right->right = splay(root->right->right, key); 
 			root = leftRotate(root); 
 		} 
-
 		return (root->right == NULL)? root: leftRotate(root); 
 	} 
 }  
