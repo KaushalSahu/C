@@ -1,5 +1,4 @@
 #include<stdio.h>
-
 void transpose(int *m,int *n,int a[][*n])
 {
 	int i;
@@ -9,17 +8,16 @@ void transpose(int *m,int *n,int a[][*n])
 	{
 		for(j=0;j<*n;j++)
 		{
-		arr[j][i]=a[i][j];
+			arr[j][i] = a[i][j];
 		}
 	}
 	for(i=0;i<*n;i++)
 	{
 		for(j=0;j<*m;j++)
 			printf("%d ",arr[i][j]);
-	printf("\n");
+		printf("\n");
 	}
 }
-
 int main()
 {
 	int m;
