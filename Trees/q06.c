@@ -24,7 +24,6 @@ struct node* insert(struct node* node, int key)
 
 	return node;
 }
-
 void leafsum(struct node *root, int *sum)
 { 
 	if (!root) 
@@ -36,7 +35,6 @@ void leafsum(struct node *root, int *sum)
 	leafsum(root->left, sum); 
 	leafsum(root->right, sum); 
 } 
-
 int main()
 {
 	int n;
