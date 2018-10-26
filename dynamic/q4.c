@@ -2,43 +2,33 @@
 #include<stdlib.h>
 #include<stdbool.h>
 
-/* Node of a doubly linked list */
 struct Node {
 	int data;
-	struct Node* next; // Pointer to next node in DLL
-	struct Node* prev; // Pointer to previous node in DLL
+	struct Node* next; 
+	struct Node* prev; 
 };
 
 void append(struct Node** head_ref, int new_data)
 {
-	/* 1. allocate node */
 	struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
 
-	struct Node* last = *head_ref; /* used in step 5*/
+	struct Node* last = *head_ref; 
 
-	/* 2. put in the data  */
 	new_node->data = new_data;
 
-	/* 3. This new node is going to be the last node, so
-	   make next of it as NULL*/
 	new_node->next = NULL;
 
-	/* 4. If the Linked List is empty, then make the new
-	   node as head */
 	if (*head_ref == NULL) {
 		new_node->prev = NULL;
 		*head_ref = new_node;
 		return;
 	}
 
-	/* 5. Else traverse till the last node */
 	while (last->next != NULL)
 		last = last->next;
 
-	/* 6. Change the next of last node */
 	last->next = new_node;
 
-	/* 7. Make last node as previous of new node */
 	new_node->prev = last;
 
 	return;
@@ -46,32 +36,26 @@ void append(struct Node** head_ref, int new_data)
 
 void deleteNode(struct Node **head_ref, struct Node *del)
 {
-  /* base case */
   if(*head_ref == NULL || del == NULL)
     return;
 
-  /* If node to be deleted is head node */
   if(*head_ref == del)
     *head_ref = del->next;
 
-  /* Change next only if node to be deleted is NOT the last node */
   if(del->next != NULL)
     del->next->prev = del->prev;
 
-  /* Change prev only if node to be deleted is NOT the first node */
   if(del->prev != NULL)
     del->prev->next = del->next;
 
-  /* Finally, free the memory occupied by del*/
   free(del);
   return;
 }
 
 
-/* Checks whether the value x is present in linked list */
 bool search(struct Node* head, int x)
 {
-    struct Node* current = head;  // Initialize current
+    struct Node* current = head;  
     while (current != NULL)
     {
         if (current->data == x)
@@ -98,10 +82,8 @@ void printList(struct Node* node)
 	}
 }
 
-/* Driver program to test above functions*/
 int main()
 {
-	/* Start with the empty list */
 	struct Node* head = NULL;
 
 	int num;
@@ -110,7 +92,6 @@ int main()
 	if ((fptr = fopen("/home/kaushal/Desktop/program.txt","r")) == NULL){
 		printf("Error! opening file");
 
-		// Program exits if the file pointer returns NULL.
 		exit(1);
 	}
 	
