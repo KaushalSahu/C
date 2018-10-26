@@ -36,33 +36,33 @@ void append(struct Node** head_ref, int new_data)
 
 void deleteNode(struct Node **head_ref, struct Node *del)
 {
-  if(*head_ref == NULL || del == NULL)
-    return;
+	if(*head_ref == NULL || del == NULL)
+		return;
 
-  if(*head_ref == del)
-    *head_ref = del->next;
+	if(*head_ref == del)
+		*head_ref = del->next;
 
-  if(del->next != NULL)
-    del->next->prev = del->prev;
+	if(del->next != NULL)
+		del->next->prev = del->prev;
 
-  if(del->prev != NULL)
-    del->prev->next = del->next;
+	if(del->prev != NULL)
+		del->prev->next = del->next;
 
-  free(del);
-  return;
+	free(del);
+	return;
 }
 
 
 bool search(struct Node* head, int x)
 {
-    struct Node* current = head;  
-    while (current != NULL)
-    {
-        if (current->data == x)
-            return true;
-        current = current->next;
-    }
-    return false;
+	struct Node* current = head;  
+	while (current != NULL)
+	{
+		if (current->data == x)
+			return true;
+		current = current->next;
+	}
+	return false;
 }
 
 void printList(struct Node* node)
@@ -94,17 +94,17 @@ int main()
 
 		exit(1);
 	}
-	
+
 	int c;
 	while(fscanf(fptr,"%d", &num)==1 )
 	{
-	append(&head,num);
+		append(&head,num);
 	}
 
-	
+
 	printf("Created DLL is: ");
 	printList(head);
-	
+
 	search(head, 21)? printf("\nElement Found.") : printf("\nElement Not Found!!!");
 
 	struct Node *curr = head;
@@ -113,7 +113,7 @@ int main()
 		curr=curr->next;
 
 	if(curr!=NULL)
-	deleteNode(&head,curr);
+		deleteNode(&head,curr);
 
 	printList(head);
 
