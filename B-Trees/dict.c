@@ -9,18 +9,32 @@ struct node {
 	int count;
 	char word[MAX+1][26];
 	struct node *link[MAX+1];
+	FILE *rp;
 };
 
 struct node *root = NULL;
 
-struct node * createNode(char word[], struct node *child) {
+struct node * createNode(char word[], char mean[], struct node *child) {
 	struct node *newNode;
+	FILE *fp;
+
 	newNode = (struct node *)malloc(sizeof(struct node));
 
 	strcpy(newNode->word[1],word);
 	newNode->count = 1;
 	newNode->link[0] = root;
 	newNode->link[1] = child;
+	fp = fopen("meanings.txt", "a+");
+	newNode->rp = fp;
+
+	if (fp == NULL) {
+		printf("meanings file not found\n");
+		return NULL;
+	}
+	fputs(mean,fp);
+	fputs(",",fp);
+	fclose(fp);
+
 
 	return newNode;
 }
@@ -73,7 +87,7 @@ void splitNode (char word[], char **pword, int pos, struct node *node, struct no
 }
 
 /* sets the value val in the node */
-int setValueInNode(char word[], char **pval, struct node *node, struct node **child) {
+int setValueInNode(char word[],char mean[], char **pval, struct node *node, struct node **child) {
 
 	int pos;
 	if (node == NULL) {
@@ -91,9 +105,20 @@ int setValueInNode(char word[], char **pval, struct node *node, struct node **ch
 			return 0;
 		}
 	}
-	if (setValueInNode(word, pval, node->link[pos], child)) {
+	if (setValueInNode(word,mean, pval, node->link[pos], child)) {
 		if (node->count < MAX) {
 			addValToNode(*pval, pos, node, *child);
+			FILE *fp;
+			fp = fopen("meanings.txt", "a+");
+			node->rp = fp;
+
+			if (fp == NULL) {
+				printf("meanings file not found\n");
+			}
+			fputs(mean,fp);
+			fputs(",",fp);
+			fclose(fp);
+
 		} else {
 			splitNode(*pval, pval, pos, node, *child, child);
 			return 1;
@@ -105,14 +130,14 @@ int setValueInNode(char word[], char **pval, struct node *node, struct node **ch
 
 
 /* insert val in B-Tree */
-void insertion(char word[]) {
+void insertion(char word[],char mean[]) {
 	int flag;
 	char *i;
 	struct node *child;
 
-	flag = setValueInNode(word, &i, root, &child);
+	flag = setValueInNode(word,mean, &i, root, &child);
 	if (flag)
-		root = createNode(i, child);
+		root = createNode(i, mean, child);
 }
 
 /* copy successor for the value to be deleted */
@@ -297,7 +322,16 @@ void searching(char word[], int *pos, struct node *myNode) {
 	} else {
 		for (*pos = myNode->count; (strcmp(word, myNode->word[*pos]) < 0 && *pos > 1); (*pos)--);
 		if (strcmp(word, myNode->word[*pos]) == 0) {
-			printf("\nThe meaning of word %s is: \n", word);
+			printf("\nThe meaning of word %s is:", word);
+			FILE *fp;
+			char ch;
+			fp = fopen("meanings.txt","r");
+			fp = myNode->rp;
+			while( (ch = getc(fp)) != ',' ) {
+				printf("%c", ch);
+			}
+			printf("\n");
+			fclose(fp);
 			return;
 		}
 	}
@@ -320,6 +354,7 @@ int main()
 {
 	int ch;
 	char word[26];
+	char mean[26];
 	while (1) {
 		printf("1. Insertion\t2. Deletion\n");
 		printf("3. Searching\t4. Traversal\n");
@@ -328,9 +363,11 @@ int main()
 
 		switch (ch) {
 			case 1:
-				printf("Enter your input:");
+				printf("Enter the word:");
 				scanf("%s", word);
-				insertion(word);
+				printf("Enter the meaning:");
+				scanf("%s", mean);
+				insertion(word,mean);
 				break;
 			case 2:
 				printf("Enter the element to delete:");
