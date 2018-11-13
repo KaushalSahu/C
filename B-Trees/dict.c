@@ -2,68 +2,93 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX 3
-#define MIN 2
+#define MAX 3 //maximum children
+#define MIN 2 //minimum children
+
+int num = 0;
 
 struct node {
 	int count;
+	int offset[MAX+1];
 	char word[MAX+1][26];
 	struct node *link[MAX+1];
-	FILE *rp;
+};
+
+struct meaning {
+	char mean[26];
 };
 
 struct node *root = NULL;
 
 struct node * createNode(char word[], char mean[], struct node *child) {
 	struct node *newNode;
+	struct meaning m;
 	FILE *fp;
 
-	newNode = (struct node *)malloc(sizeof(struct node));
+	newNode = (struct node *) malloc(sizeof(struct node));
 
 	strcpy(newNode->word[1],word);
 	newNode->count = 1;
 	newNode->link[0] = root;
 	newNode->link[1] = child;
+	newNode->offset[1] = num++;
+
 	fp = fopen("meanings.txt", "a+");
-	newNode->rp = fp;
 
 	if (fp == NULL) {
 		printf("meanings file not found\n");
 		return NULL;
 	}
-	fputs(mean,fp);
-	fputs(",",fp);
-	fclose(fp);
 
+	strcpy(m.mean, mean);
+	fwrite(&m, sizeof(struct meaning), 1, fp);
+	fclose(fp);
 
 	return newNode;
 }
 
 /* Places the wordue in appropriate position */
-void addValToNode(char word[], int pos, struct node *node, struct node *child) {
-	int j = node->count;
+void addValToNode(char word[],char mean[], int pos, struct node *node, struct node *child) {
+	FILE *fp;
+	struct meaning m;
+	int j;
+
+	j = node->count;
 
 	while (j > pos) {
 		strcpy(node->word[j + 1], node->word[j]);
 		node->link[j + 1] = node->link[j];
+		node->offset[j+1] = node->offset[j];
 		j--;
 	}
 
 	strcpy(node->word[j + 1], word);
 	node->link[j + 1] = child;
 	node->count++;
+	node->offset[j+1] = num++;
+
+	fp = fopen("meanings.txt", "a+");
+
+	if (fp == NULL) {
+		printf("meanings file not found\n");
+	}
+
+	strcpy(m.mean, mean);
+	fwrite(&m, sizeof(struct meaning), 1, fp);
+	fclose(fp);
 }
 
 /* split the node */
-void splitNode (char word[], char **pword, int pos, struct node *node, struct node *child, struct node **newNode) {
-	int median, j;
+void splitNode (char word[], char mean[], char **pword, int pos, struct node *node, struct node *child, struct node **newNode) {
+	int median;
+	int j;
 
 	if (pos > MIN)
 		median = MIN + 1;
 	else
 		median = MIN;
 
-	*newNode = (struct node *)malloc(sizeof(struct node));
+	*newNode = (struct node *) malloc(sizeof(struct node));
 	j = median + 1;
 
 	while (j <= MAX) {
@@ -76,9 +101,9 @@ void splitNode (char word[], char **pword, int pos, struct node *node, struct no
 	(*newNode)->count = MAX - median;
 
 	if (pos <= MIN) {
-		addValToNode(word, pos, node, child);
+		addValToNode(word,mean, pos, node, child);
 	} else {
-		addValToNode(word, pos - median, *newNode, child);
+		addValToNode(word,mean, pos - median, *newNode, child);
 	}
 
 	strcpy(*pword, node->word[node->count]);
@@ -87,40 +112,32 @@ void splitNode (char word[], char **pword, int pos, struct node *node, struct no
 }
 
 /* sets the value val in the node */
-int setValueInNode(char word[],char mean[], char **pval, struct node *node, struct node **child) {
-
+int setValueInNode(char word[], char mean[], char **pval, struct node *node, struct node **child) {
 	int pos;
+
 	if (node == NULL) {
 		*pval = word;
 		*child = NULL;
+
 		return 1;
 	}
 
-	if (strcmp(word,node->word[1]) < 0) {
+	if (strcmp(word, node->word[1]) < 0) {
 		pos = 0;
 	} else {
-		for (pos = node->count; (strcmp(word,node->word[pos]) < 0 && pos > 1); pos--);
-		if (strcmp(word,node->word[pos]) == 0) {
+		for (pos = node->count; (strcmp(word, node->word[pos]) < 0 && pos > 1); pos--);
+		if (strcmp(word, node->word[pos]) == 0) {
 			printf("Duplicates not allowed\n");
+
 			return 0;
 		}
 	}
-	if (setValueInNode(word,mean, pval, node->link[pos], child)) {
+	if (setValueInNode(word, mean, pval, node->link[pos], child)) {
 		if (node->count < MAX) {
-			addValToNode(*pval, pos, node, *child);
-			FILE *fp;
-			fp = fopen("meanings.txt", "a+");
-			node->rp = fp;
-
-			if (fp == NULL) {
-				printf("meanings file not found\n");
-			}
-			fputs(mean,fp);
-			fputs(",",fp);
-			fclose(fp);
-
+			addValToNode(*pval, mean, pos, node, *child);
 		} else {
-			splitNode(*pval, pval, pos, node, *child, child);
+			splitNode(*pval, mean, pval, pos, node, *child, child);
+
 			return 1;
 		}
 	}
@@ -128,25 +145,27 @@ int setValueInNode(char word[],char mean[], char **pval, struct node *node, stru
 	return 0;
 }
 
-
 /* insert val in B-Tree */
-void insertion(char word[],char mean[]) {
+void insertion(char word[], char mean[]) {
 	int flag;
 	char *i;
 	struct node *child;
 
-	flag = setValueInNode(word,mean, &i, root, &child);
-	if (flag)
+	flag = setValueInNode(word, mean, &i, root, &child);
+	if (flag) {
 		root = createNode(i, mean, child);
+		}
 }
 
 /* copy successor for the value to be deleted */
 void copySuccessor(struct node *myNode, int pos) {
 	struct node *dummy;
+
 	dummy = myNode->link[pos];
 
 	for (;dummy->link[0] != NULL;)
 		dummy = dummy->link[0];
+
 	strcpy(myNode->word[pos], dummy->word[1]);
 
 }
@@ -154,6 +173,7 @@ void copySuccessor(struct node *myNode, int pos) {
 /* removes the value from the given node and rearrange values */
 void removeVal(struct node *myNode, int pos) {
 	int i = pos + 1;
+
 	while (i <= myNode->count) {
 		strcpy(myNode->word[i - 1], myNode->word[i]);
 		myNode->link[i - 1] = myNode->link[i];
@@ -179,6 +199,7 @@ void doRightShift(struct node *myNode, int pos) {
 	strcpy(myNode->word[pos], x->word[x->count]);
 	myNode->link[pos] = x->link[x->count];
 	x->count--;
+
 	return;
 }
 
@@ -201,6 +222,7 @@ void doLeftShift(struct node *myNode, int pos) {
 		x->link[j] = x->link[j + 1];
 		j++;
 	}
+
 	return;
 }
 
@@ -230,7 +252,33 @@ void mergeNodes(struct node *myNode, int pos) {
 	free(x1);
 }
 
-/* adjusts the given node */
+int Node(struct node *myNode, int pos) {
+	if (!pos) {
+		if (myNode->link[1]->count > MIN) {
+			doLeftShift(myNode, 1);
+		} else {
+			mergeNodes(myNode, 1);
+		}
+	} else {
+		if (myNode->count != pos) {
+			if(myNode->link[pos - 1]->count > MIN) {
+				doRightShift(myNode, pos);
+			} else {
+				if (myNode->link[pos + 1]->count > MIN) {
+					doLeftShift(myNode, pos + 1);
+				} else {
+					mergeNodes(myNode, pos);
+				}
+			}
+		} else {
+			if (myNode->link[pos - 1]->count > MIN)
+				doRightShift(myNode, pos);
+			else
+				mergeNodes(myNode, pos);
+		}
+	}
+}
+/*adjusts the given node */
 void adjustNode(struct node *myNode, int pos) {
 	if (!pos) {
 		if (myNode->link[1]->count > MIN) {
@@ -257,7 +305,6 @@ void adjustNode(struct node *myNode, int pos) {
 		}
 	}
 }
-
 /* delete val from the node */
 int delValFromNode(char word[], struct node *myNode) {
 	int pos, flag = 0;
@@ -291,14 +338,17 @@ int delValFromNode(char word[], struct node *myNode) {
 				adjustNode(myNode, pos);
 		}
 	}
+
 	return flag;
 }
 
 /* delete val from B-tree */
 void deletion(char word[], struct node *myNode) {
 	struct node *tmp;
+
 	if (!delValFromNode(word, myNode)) {
 		printf("Given word is not present in B-Tree\n");
+
 		return;
 	} else {
 		if (myNode->count == 0) {
@@ -308,12 +358,14 @@ void deletion(char word[], struct node *myNode) {
 		}
 	}
 	root = myNode;
+
 	return;
 }
 
 /* search val in B-Tree */
 void searching(char word[], int *pos, struct node *myNode) {
 	if (!myNode) {
+
 		return;
 	}
 
@@ -322,22 +374,25 @@ void searching(char word[], int *pos, struct node *myNode) {
 	} else {
 		for (*pos = myNode->count; (strcmp(word, myNode->word[*pos]) < 0 && *pos > 1); (*pos)--);
 		if (strcmp(word, myNode->word[*pos]) == 0) {
-			printf("\nThe meaning of word %s is:", word);
+			printf("\nThe meaning of word %s is:", myNode->word[*pos]);
 			FILE *fp;
-			char ch;
+			struct meaning m;
+
 			fp = fopen("meanings.txt","r");
-			fp = myNode->rp;
-			while( (ch = getc(fp)) != ',' ) {
-				printf("%c", ch);
-			}
-			printf("\n");
+			fseek(fp,sizeof(struct meaning)*myNode->offset[*pos],SEEK_SET);
+			fread(&m,sizeof(struct meaning),1,fp);
+			printf("%s\n",m.mean);
+			//printf("Offset = %d",myNode->offset[*pos]);
 			fclose(fp);
+
 			return;
 		}
 	}
 	searching(word, pos, myNode->link[*pos]);
+
 	return;
 }
+
 /* B-Tree Traversal */
 void traversal(struct node *myNode) {
 	int i;
@@ -345,6 +400,7 @@ void traversal(struct node *myNode) {
 		for (i = 0; i < myNode->count; i++) {
 			traversal(myNode->link[i]);
 			printf("%s ", myNode->word[i + 1]);
+			//printf("%d", myNode->offset[i+1]);
 		}
 		traversal(myNode->link[i]);
 	}
@@ -355,6 +411,7 @@ int main()
 	int ch;
 	char word[26];
 	char mean[26];
+
 	while (1) {
 		printf("1. Insertion\t2. Deletion\n");
 		printf("3. Searching\t4. Traversal\n");
@@ -389,6 +446,7 @@ int main()
 				break;
 		}
 		printf("\n");
-	}	
+	}
+
 	return 0;
 }
