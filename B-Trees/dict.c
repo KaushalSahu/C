@@ -440,6 +440,9 @@ int main()
 				traversal(root);
 				break;
 			case 5:
+				//sh -c rm meanings.txt;
+				//int system(const char *command);
+				system("rm meanings.txt");
 				exit(0);
 			default:
 				printf("You have entered wrong option!!\n");
