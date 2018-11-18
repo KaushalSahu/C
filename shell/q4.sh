@@ -1,6 +1,7 @@
 #!/bin/bash
 
-	for x in 1 2 3 4 "Hello World"; do
+
+	for x in `ls`; do
 		echo $x
 	done
 
