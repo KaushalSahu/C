@@ -38,10 +38,8 @@ void writeToFile(char mean[])
 	fclose(fp);
 }
 
-struct node * createNode(char word[], char mean[], struct node *child, int num,int flag) {
+struct node * createNode(char word[], char mean[], struct node *child, int num) {
 	struct node *newNode;
-	struct meaning m;
-	FILE *fp;
 
 	newNode = (struct node *) malloc(sizeof(struct node));
 
@@ -51,27 +49,11 @@ struct node * createNode(char word[], char mean[], struct node *child, int num,i
 	newNode->link[1] = child;
 	newNode->offset[1] = num;
 
-	/*if(flag == 1) {
-		printf("word in create");
-		fp = fopen("meanings.bin", "a+");
-
-		if (fp == NULL) {
-			printf("meanings file not found\n");
-			return NULL;
-		}
-
-		strcpy(m.mean, mean);
-		fwrite(&m, sizeof(struct meaning), 1, fp);
-		fclose(fp);
-	}*/
-
 	return newNode;
 }
 
 /* Places the word in appropriate position */
-void addWordToNode(char word[],char mean[], int num,  int pos, struct node *node, struct node *child,int flag) {
-	FILE *fp;
-	struct meaning m;
+void addWordToNode(char word[],char mean[], int num,  int pos, struct node *node, struct node *child) {
 	int j;
 
 	j = node->count;
@@ -87,17 +69,6 @@ void addWordToNode(char word[],char mean[], int num,  int pos, struct node *node
 	node->link[j + 1] = child;
 	node->count++;
 	node->offset[j+1] = num;
-
-	/*fp = fopen("meanings.bin", "a+");
-	printf("word in addnode");
-	if (fp == NULL) {
-		printf("meanings file not found\n");
-	}
-
-	strcpy(m.mean, mean);
-	fwrite(&m, sizeof(struct meaning), 1, fp);
-	fclose(fp);*/
-
 }
 
 /* split the node */
@@ -124,9 +95,9 @@ void splitNode (char word[], char mean[], int *off, char **pword, int pos, struc
 	(*newNode)->count = MAX - median;
 
 	if (pos <= MIN) {
-		addWordToNode(word,mean,*off, pos, node, child,2);
+		addWordToNode(word,mean,*off, pos, node, child);
 	} else {
-		addWordToNode(word,mean,*off, pos - median, *newNode, child,2);
+		addWordToNode(word,mean,*off, pos - median, *newNode, child);
 	}
 
 	strcpy(*pword, node->word[node->count]);
@@ -160,12 +131,12 @@ int setWordInNode(char word[], char mean[],int num, int *off, char **pword, stru
 	}
 	if (setWordInNode(word, mean, num,off, pword, node->link[pos], child)) {
 		if (node->count < MAX) {
-			addWordToNode(*pword,mean,*off, pos, node, *child, 1);
+			addWordToNode(*pword,mean,*off, pos, node, *child);
 
 		} else {
 			splitNode(*pword, mean, off, pword, pos, node, *child, child);
 
-			return 2;
+			return 1;
 		}
 	}
 
@@ -181,7 +152,7 @@ void insertion(char word[], char mean[], int num) {
 
 	flag = setWordInNode(word, mean,num, &off, &i, root, &child);
 	if (flag) {
-		root = createNode(i, mean, child, off,flag);
+		root = createNode(i, mean, child, off);
 	}
 }
 
@@ -200,9 +171,13 @@ void modify(char word[],char mean[], int *pos, struct node *myNode) {
 			FILE *fp;
 			struct meaning m;
 
-			fp = fopen("meanings.bin","w");
-			fseek(fp,sizeof(struct meaning)*myNode->offset[*pos],SEEK_SET);
 			strcpy(m.mean, mean);
+			fp = fopen("meanings.bin","r+");
+			if (fp == NULL) {
+				printf("meanings file not found\n");
+				return;
+			}
+			fseek(fp,sizeof(struct meaning)*myNode->offset[*pos],SEEK_SET);
 			fwrite(&m, sizeof(struct meaning), 1, fp);
 			fclose(fp);
 
@@ -233,7 +208,7 @@ void removeWord(struct node *myNode, int pos) {
 	/*FILE *fp;
 	  struct meaning m;
 
-	  fp = fopen("meanings.bin","w");
+	  fp = fopen("meanings.bin","w+");
 	  fseek(fp,sizeof(struct meaning)*myNode->offset[pos],SEEK_SET);
 	  strcpy(m.mean, "");
 	  fwrite(&m, sizeof(struct meaning), 1, fp);
@@ -422,7 +397,7 @@ void search(char word[], int *pos, struct node *myNode) {
 		for (*pos = myNode->count; (strcmp(word, myNode->word[*pos]) < 0 && *pos > 1); (*pos)--);
 		if (strcmp(word, myNode->word[*pos]) == 0) {
 			printf("\nThe meaning of word %s is:", myNode->word[*pos]);
-			printf("Offset = %d",myNode->offset[*pos]);
+			//printf("Offset = %d",myNode->offset[*pos]);
 			FILE *fp;
 			struct meaning m;
 
@@ -446,8 +421,15 @@ void Print(struct node *myNode) {
 	if (myNode) {
 		for (i = 0; i < myNode->count; i++) {
 			Print(myNode->link[i]);
-			printf("%s, ", myNode->word[i + 1]);
-			printf("%d", myNode->offset[i+1]);
+			printf("%s:", myNode->word[i + 1]);
+			FILE *fp;
+			struct meaning m;
+
+			fp = fopen("meanings.bin","r");
+			fseek(fp,sizeof(struct meaning)*myNode->offset[i+1],SEEK_SET);
+			fread(&m,sizeof(struct meaning),1,fp);
+			printf("%s, ",m.mean);
+			fclose(fp);
 		}
 		Print(myNode->link[i]);
 	}
@@ -496,7 +478,7 @@ int main()
 				printf("\n");
 				break;
 			case 6:
-				//system("rm meanings.bin");
+				system("rm meanings.bin");
 				exit(0);
 			default:
 				printf("You have entered wrong option!!\n");
