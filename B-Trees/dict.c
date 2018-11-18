@@ -205,14 +205,6 @@ void copySuccessor(struct node *myNode, int pos) {
 /* removes the word from the given node and rearrange words */
 void removeWord(struct node *myNode, int pos) {
 	int i = pos + 1;
-	/*FILE *fp;
-	  struct meaning m;
-
-	  fp = fopen("meanings.bin","w+");
-	  fseek(fp,sizeof(struct meaning)*myNode->offset[pos],SEEK_SET);
-	  strcpy(m.mean, "");
-	  fwrite(&m, sizeof(struct meaning), 1, fp);
-	  fclose(fp);*/
 
 	while (i <= myNode->count) {
 		strcpy(myNode->word[i - 1], myNode->word[i]);
@@ -220,6 +212,7 @@ void removeWord(struct node *myNode, int pos) {
 		myNode->link[i - 1] = myNode->link[i];
 		i++;
 	}
+
 	myNode->count--;
 }
 
@@ -278,7 +271,7 @@ void mergeNodes(struct node *myNode, int pos) {
 
 	x2->count++;
 	strcpy(x2->word[x2->count], myNode->word[pos]);
-	x2->link[x2->count] = myNode->link[0];
+	x2->link[x2->count] = x1->link[0];
 
 	while (j <= x1->count) {
 		x2->count++;
