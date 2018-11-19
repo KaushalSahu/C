@@ -3,8 +3,8 @@
 #include <string.h>
 #include <sys/stat.h>
 
-#define MAX 30 
-#define MIN 15 
+#define MAX 2
+#define MIN 1
 
 struct stat file;
 //MAX = (file.st_blksize+34)/42;
@@ -200,8 +200,12 @@ void search(char word[], int *pos, struct node *myNode) {
 
 	if (strcmp(word, myNode->word[1]) < 0) {
 		*pos = 0;
+		//printf("%s\n",myNode->word[*pos]);
 	} else {
-		for (*pos = myNode->count; (strcmp(word, myNode->word[*pos]) < 0 && *pos > 1); (*pos)--);
+		for (*pos = myNode->count; (strcmp(word, myNode->word[*pos]) < 0 && *pos > 1); (*pos)--); /*{
+			printf("%s\n",myNode->word[*pos]);
+
+		}*/
 		if (strcmp(word, myNode->word[*pos]) == 0) {
 			printf("\nThe meaning of word %s is:", myNode->word[*pos]);
 			//printf("Offset = %d",myNode->offset[*pos]);
@@ -217,6 +221,7 @@ void search(char word[], int *pos, struct node *myNode) {
 			return;
 		}
 	}
+	//printf("%s\n",myNode->word[*pos]);
 	search(word, pos, myNode->link[*pos]);
 
 	return;
@@ -276,6 +281,7 @@ int main()
 	  insertion(word, mean, num++);
 
 	  }*/
+	  
 	num = Load(num);
 	while (1) {
 		printf("\n1. Insert\t2. Modify\t\n");
