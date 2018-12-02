@@ -1,5 +1,5 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 struct node
 {
@@ -11,18 +11,15 @@ struct node * s;
 
 void push()
 {   
-	struct node * temp,*cur;
-	temp = (struct  node *)malloc(sizeof(struct node));
-	scanf("%d",&temp->data);
-	temp->next=NULL;
-	cur = s;
-	if(s == NULL)
-	{
-		s= temp;
-	}
+	struct node * temp;
+	temp = (struct  node *) malloc(sizeof(struct node));
+	scanf("%d", &temp->data);
 
-	else
-	{
+	temp->next = NULL;
+
+	if(s == NULL) {
+		s = temp;
+	} else {
 		temp->next = s;
 		s = temp;
 	}
@@ -32,9 +29,9 @@ void push()
 void printm()
 {   
 	struct node * temp = s;
-	while(temp!= NULL)
-	{
-		printf("%d -> ",temp->data);
+
+	while(temp != NULL) {
+		printf("%d -> ", temp->data);
 		temp = temp->next;
 	}
 	printf("DONE\n");
@@ -42,14 +39,14 @@ void printm()
 
 int main()
 {
-	s = (struct node *)malloc(sizeof(struct node));
+	s = (struct node *) malloc(sizeof(struct node));
 	s = NULL;
 	int h;
 
-	while(1){
-		printf("1 to push and 2 to print and 0 to exit : ");
-		scanf("%d",&h);
-		if(h ==1)
+	while(1) {
+		printf("\n1 to push \n2 to print and \n0 to exit : ");
+		scanf("%d", &h);
+		if(h == 1)
 			push();
 		if(h == 2)
 			printm();
@@ -58,5 +55,3 @@ int main()
 	}
 	return 0;
 }
-
-
