@@ -95,12 +95,11 @@ int main()
 		exit(1);
 	}
 
-	int c;
+
 	while(fscanf(fptr,"%d", &num)==1 )
 	{
 		append(&head,num);
 	}
-
 
 	printf("Created DLL is: ");
 	printList(head);

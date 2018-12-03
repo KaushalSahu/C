@@ -43,6 +43,6 @@ int main()
 	scanf("%d",&n1);
 	temp=a;
 	for(int i=0;i<n1;i++) 
-		temp  = pop_back(temp, &capacity, &n);
+		temp = pop_back(temp, &capacity, &n);
 }
 

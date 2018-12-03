@@ -83,8 +83,6 @@ int main()
 		exit(1);
 	}
 
-	int c;
-
 	while(fscanf(fptr,"%d", &num)==1 )
 	{
 		push(&a,num);

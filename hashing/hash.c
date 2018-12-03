@@ -110,14 +110,13 @@ int main()
 	}
 	scanf("%d",&temp);
 	delete(dummyItem, item);
-	  item = search(temp);
-	  display();
+	item = search(temp);
+	display();
 
-	  if(item != NULL) {
-	  printf("Element found: %d\n", item->data);
-	  } else {
-	  printf("Element not found\n");
-	  }
+	if(item != NULL) {
+		printf("Element found: %d\n", item->data);
+	} else {
+		printf("Element not found\n");
+	}
 
 }
-

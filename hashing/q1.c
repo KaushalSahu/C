@@ -1,5 +1,5 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 struct node
 {
@@ -7,6 +7,7 @@ struct node
 	struct node *friend;
 	struct node *next;
 };
+
 struct hash
 {
 	struct node *key;
@@ -32,18 +33,13 @@ struct node* create(struct node *head, int a)
 	}
 	return head;
 }
+
 void print(struct hash *ht[],int n)
 {
-	/*struct node *temp=(struct node*)malloc(sizeof(struct node));
-	temp=head;
-	while(temp!=NULL)
-	{
-	printf("%d_",temp->friend->data);
-	temp=temp->next;
-	}*/
 	int i=-1;
-	while(++i<n)	
+	while(++i<n) {	
 		printf("%d_",ht[i]->value->data);
+	}
 }
 
 
@@ -52,7 +48,6 @@ int main()
 
 	int n;
 	int a;
-	int b;
 	int c;
 
 	struct node *head=(struct node*)malloc(sizeof(struct node));

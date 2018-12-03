@@ -1,6 +1,6 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 struct node
 {
@@ -16,18 +16,19 @@ struct hash
 
 void hashinit(struct hash *ht[])
 {
-	struct node *temp=(struct node*)malloc(sizeof(struct node));
-	temp=NULL;
+	struct node *temp = (struct node*)malloc(sizeof(struct node));
+	temp = NULL;
 
-	for(int i=0;i<26;i++)
+	for(int i = 0; i < 26; i++)
 	{
 		struct hash *item = (struct hash*) malloc(sizeof(struct hash));
-		item->key=i;
-		item->value=temp;
-		ht[i]=item;
+		item->key = i;
+		item->value = temp;
+		ht[i] = item;
 	}
 
 }
+
 void insert(int i,char a[][100],struct hash *ht[]) 
 {
 	int c=0;
@@ -84,7 +85,7 @@ int main()
 		struct hash *ht[26];
 		hashinit(ht);
 		insert(i,a,ht);
-	print(ht);
+		print(ht);
 	}
 
 }

@@ -2,13 +2,11 @@
 #include<stdlib.h>
 #include<string.h>
 
-
 struct hash
 {
 	char ch[30];
 	int count;
 };
-
 
 void hashinit(struct hash *ht[],int n)
 {
@@ -20,6 +18,7 @@ void hashinit(struct hash *ht[],int n)
 		ht[i]=item;
 
 }
+
 void insert(int n,char a[][30],struct hash *ht[]) 
 {
 	int c=0;
@@ -33,16 +32,14 @@ void insert(int n,char a[][30],struct hash *ht[])
 
 	for(int i=1;i<n;i++)
 	{
-	
+
 		int flag=0;
 
 		j=c;
 		while(j>=0)
 		{
-			//printf("\n%d %s",j,ht[j]->ch);
 			if((strcmp(a[i],ht[j]->ch))==0)
 			{
-			printf("if  %d",j);
 				flag=1;
 				break;
 			}
@@ -51,13 +48,11 @@ void insert(int n,char a[][30],struct hash *ht[])
 
 		if(flag==0)
 		{
-		printf("%d",i);
-		strcpy(a[i],ht[i]->ch);
-		item->count=1;
-		ht[c]=item;
+			strcpy(a[i],ht[i]->ch);
+			item->count=1;
+			ht[c]=item;
 			c++;
-			printf("\n%s",a[i]);
-		 
+
 		}
 	}
 }

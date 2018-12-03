@@ -85,4 +85,3 @@ int main()
 	temp  = pop_back(temp, &capacity, &n, val, 2);
 	temp  = pop_back(temp, &capacity, &n, val2, 3);
 }
-
