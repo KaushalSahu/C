@@ -45,4 +45,3 @@ int main()
 	for(int i=0;i<n1;i++) 
 		temp = pop_back(temp, &capacity, &n);
 }
-
