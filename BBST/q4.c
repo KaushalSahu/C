@@ -195,7 +195,6 @@ void preOrder(struct Node *root)
 int main() 
 { 
 	struct Node *root = NULL; 
-	int i;
 	int n;
 	int a;
 	int k;

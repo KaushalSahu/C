@@ -54,7 +54,7 @@ struct node *rightrotate(struct node *root)
 			if(root->left->right != NULL)
 				temp = root->left->right;
 			root->left->right = root;
-			root->left= temp;
+			root->left = temp;
 		}
 	}
 	return temp2;
