@@ -35,6 +35,7 @@ void leafsum(struct node *root, int *sum)
 	leafsum(root->left, sum); 
 	leafsum(root->right, sum); 
 } 
+
 int main()
 {
 	int n;

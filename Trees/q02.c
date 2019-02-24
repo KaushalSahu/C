@@ -48,8 +48,8 @@ void postorder(struct node *root)
 {
 	if (root != NULL)
 	{
-		inorder(root->left);
-		inorder(root->right);
+		postorder(root->left);
+		postorder(root->right);
 		printf("%d_", root->key);
 	}
 
@@ -59,7 +59,6 @@ int main()
 	int n;
 	int i;
 	int a;
-	int k;
 	scanf("%d",&n);
 	struct node *root = NULL;
 	for(i=0;i<n;i++)
